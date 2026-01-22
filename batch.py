@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 2:
         print("Usage: python batch.py <command> [arguments]")
-        sys.exit(1)
+        sys.exit(0)
 
     command = sys.argv[1].lower()
 
