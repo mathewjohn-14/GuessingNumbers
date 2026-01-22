@@ -1,10 +1,11 @@
+import sys
+
 class Library:
     def __init__(self):
         self.books = {}  # book_id -> {title, author, available}
         self.next_id = 1
 
     def add_book(self, title, author):
-        # Check if book already exists by title and author
         for book in self.books.values():
             if book["title"].lower() == title.lower() and book["author"].lower() == author.lower():
                 print(f"'{title}' by {author} already exists in the library.")
@@ -60,50 +61,35 @@ class Library:
             print(f"Book ID {book_id} not found in the library.")
 
 
-# --- Demo ---
-library = Library()
+# --- Non-interactive Demo for Jenkins ---
+if __name__ == "__main__":
+    library = Library()
 
-while True:
-    print("\n--- Library Menu ---")
-    print("1. Add Book")
-    print("2. Display Books")
-    print("3. Borrow Book")
-    print("4. Return Book")
-    print("5. Search Book")
-    print("6. Remove Book")
-    print("7. Exit")
+    # Example usage with command-line arguments
+    # python batch.py add "The Hobbit" "J.R.R. Tolkien"
+    # python batch.py display
+    # python batch.py borrow 1
+    # python batch.py return 1
+    # python batch.py search Hobbit
+    # python batch.py remove 1
 
-    choice = input("Enter your choice: ")
+    if len(sys.argv) < 2:
+        print("Usage: python batch.py <command> [arguments]")
+        sys.exit(1)
 
-    if choice == "1":
-        title = input("Enter book title: ")
-        author = input("Enter author name: ")
-        library.add_book(title, author)
-    elif choice == "2":
+    command = sys.argv[1].lower()
+
+    if command == "add" and len(sys.argv) == 4:
+        library.add_book(sys.argv[2], sys.argv[3])
+    elif command == "display":
         library.display_books()
-    elif choice == "3":
-        try:
-            book_id = int(input("Enter book ID to borrow: "))
-            library.borrow_book(book_id)
-        except ValueError:
-            print("Invalid input. Please enter a numeric ID.")
-    elif choice == "4":
-        try:
-            book_id = int(input("Enter book ID to return: "))
-            library.return_book(book_id)
-        except ValueError:
-            print("Invalid input. Please enter a numeric ID.")
-    elif choice == "5":
-        keyword = input("Enter keyword (title/author): ")
-        library.search_books(keyword)
-    elif choice == "6":
-        try:
-            book_id = int(input("Enter book ID to remove: "))
-            library.remove_book(book_id)
-        except ValueError:
-            print("Invalid input. Please enter a numeric ID.")
-    elif choice == "7":
-        print("Exiting Library System. Goodbye!")
-        break
+    elif command == "borrow" and len(sys.argv) == 3:
+        library.borrow_book(int(sys.argv[2]))
+    elif command == "return" and len(sys.argv) == 3:
+        library.return_book(int(sys.argv[2]))
+    elif command == "search" and len(sys.argv) == 3:
+        library.search_books(sys.argv[2])
+    elif command == "remove" and len(sys.argv) == 3:
+        library.remove_book(int(sys.argv[2]))
     else:
-        print("Invalid choice. Please try again.")
+        print("Invalid command or arguments.")
